@@ -56,7 +56,7 @@ PYPI_URL = "http://pypi.python.org/pypi/git-review/json"
 PYPI_CACHE_TIME = 60 * 60 * 24  # 24 hours
 DEFAULTS = dict(hostname=False, port='29418', project=False,
                 defaultbranch='master', defaultremote="gerrit",
-                defaultrebase="1")
+                defaultrebase="1", defaultaction="publish")
 
 _branch_name = None
 _has_color = None
@@ -434,6 +434,7 @@ def load_config_file(config_file):
         'defaultbranch': 'defaultbranch',
         'defaultremote': 'defaultremote',
         'defaultrebase': 'defaultrebase',
+        'defaultaction': 'defaultaction',
     }
     config = {}
     for config_key, option_name in options.items():
@@ -986,6 +987,8 @@ def main():
 
     parser.add_argument("-t", "--topic", dest="topic",
                         help="Topic to submit branch to")
+    parser.add_argument("-P", "--publish", dest="publish", action="store_true",
+                        help="Submit review as a public change, default mode.")
     parser.add_argument("-D", "--draft", dest="draft", action="store_true",
                         help="Submit review as a draft")
     parser.add_argument("-c", "--compatible", dest="compatible",
@@ -1089,7 +1092,9 @@ def main():
                         list=False,
                         yes=False,
                         branch=config['defaultbranch'],
-                        remote=config['defaultremote'])
+                        remote=config['defaultremote'],
+			action=config['defaultaction'])
+
     options = parser.parse_args()
 
     if options.license:
@@ -1150,9 +1155,11 @@ def main():
             print_exit_message(1, needs_update)
     assert_one_change(remote, branch, yes, have_hook)
 
-    ref = "publish"
+    ref = options.action
 
-    if options.draft:
+    if options.publish:
+        ref = "publish"
+    elif options.draft:
         ref = "drafts"
         if options.custom_script:
             run_custom_script("draft")
