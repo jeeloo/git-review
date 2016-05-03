@@ -49,4 +49,7 @@ build:
         code: |
           echo "python version $(python --version) running"
           echo "pip version $(pip --version) running"
-
+    - script:
+          name: PEP8 check
+          code: |
+              pep8 ./git_review
