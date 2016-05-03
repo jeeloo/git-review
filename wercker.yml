@@ -37,7 +37,6 @@ build:
 
     # A step that executes `pip install` command.
     - pip-install
-        packages_list: "pep8"
 
     # # This pip-install clears the local wheel cache
     # - pip-install:
