@@ -1,6 +1,16 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
+import datetime
+import json
+import os
+import pkg_resources
+import re
+import shlex
+import subprocess
+import sys
+import textwrap
+
 COPYRIGHT = """\
 Copyright (C) 2011-2012 OpenStack LLC.
 
@@ -17,16 +27,6 @@ implied.
 
 See the License for the specific language governing permissions and
 limitations under the License."""
-
-import datetime
-import json
-import os
-import pkg_resources
-import re
-import shlex
-import subprocess
-import sys
-import textwrap
 
 if sys.version < '3':
     import ConfigParser
